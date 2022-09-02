@@ -4,9 +4,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jQuery.js"></script>
+    <script src="client.js"></script>
+    <title>Calculator</title>
 </head>
 <body>
-    
+    <h1>Weekend Challenge #2</h1>
+    <h2>Server Side Calculator</h2>
+    <section id="calculatorSection">
+        <div id="inputSection">
+            <input type="numberInput"/>
+            <button id="calculateButton">C</button>
+        </div>
+        <tbody id="buttonSection">
+            <tr id="firstRow">
+                <button id="7">7</button>
+                <button id="8">8</button>
+                <button id="9">9</button>
+                <button id="+">+</button>
+            </tr>
+            <tr id="secondRow">
+                <button id="4">4</button>
+                <button id="5">5</button>
+                <button id="6">6</button>
+                <button id="-">-</button>
+            </tr>
+            <tr id="thirdRow">
+                <button id="1">1</button>
+                <button id="2">2</button>
+                <button id="3">3</button>
+                <button id="*">*</button>
+            </tr>
+            <tr id="fourthRow">
+                <button id="0">0</button>
+                <button id=".">.</button>
+                <button id="=">=</button>
+                <button id="/">/</button>
+            </tr>
+        </tbody>
+        <h3 id="results"></h3>
+    </section>
+    <section id="historySection">
+        <ul id="historyList"></ul>
+    </section>
 </body>
 </html>
