@@ -54,7 +54,10 @@ function combineArrays(numObject){
     console.log(historyString);
     history.push(historyString);
 
-    calculateResults();
+    calculateResults(mergedArray);
 };
 
 
+function calculateResults(mergedArray){
+    console.log(mergedArray);
+}

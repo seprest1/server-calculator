@@ -7,40 +7,62 @@ function onReady(){
     clickHandler();
 };
 
-
 function clickHandler(){
-    $('.numButton').on('click', numInput);
-    $('.operatorButton').on('click', operatorInput);
-   
+    $('.numButton').on('click', numButton);
+    $('.operatorButton').on('click', operatorButton);
 };
+                                                        
 
-let numArray = [];
+let appendArray = [];
 let operandArray = [];
 let operatorArray = [];
 
+function numButton(){
+    let digit = $(this).attr('id');  
+    appendNumber(digit);
+}
 
-function numInput(){
-    let numId = $(this).attr('id');                         //ids for each button are a number or a decimal point, 
-    numArray.push(numId);                                   //so every time a user presses a button, it adds 
-    $('#displayNum').append(`${numId}`);                    //that number to an array and also appends the DOM. 
-};
-
-function operatorInput(){
-    let operatorId = $(this).attr('id');                    //sets operator id ('+','-','*','/') as a variable.
-    let fullNumber = numArray.join('');                     //joins the single digits of a number together as a string
-    operandArray.push(fullNumber);                          //pushes into operand array
-    operatorArray.push(operatorId);                         //pushes specific operator into operator array
-    
-    $('#displayNum').append(`${$(this).attr('id')}`);       //updates the DOM with the operator
-    console.log(operandArray);
+function operatorButton(){
+    let operator = $(this).attr('id');  
+    $('#displayNum').empty();
+    appendDisplay(operator);
+    concatNumber();
+    operatorArray.push(operator);
     console.log(operatorArray);
-    numArray = [];                                          //resets the number array, which allows for a new number
-    if (operatorId === '='){                                //once user presses =, it sends expressions to server
-        postNumbers();                                      //to be calculated. Setting the data object this way allows 
-        $('#displayNum').empty();                           //user to do unlimited calculations. Empty the display.
-    }                                                       
-}                                                            
-                                                            
+}
+
+function appendDisplay(input){
+    $('#displayNum').append(input);
+}
+
+function appendNumber(input){
+    let appendedNumber = '';
+    if (input === '.' && appendArray.includes('.')){
+        return;
+    }
+    else{
+        appendArray.push(input);
+        console.log(appendArray);
+        appendDisplay(input);
+    }
+}
+
+function concatNumber(){
+    let operand = appendArray.join('');
+    operandArray.push(operand);
+    appendArray = [];
+    console.log(operandArray);
+}
+
+function clearNumber(){
+
+}
+
+function clearAll(){
+
+}
+
+
 function fetchResults(){
     $.ajax({
         method: 'GET',
@@ -59,7 +81,6 @@ function fetchHistory(){
     })
 };
 
-
 function postNumbers(){
     let value = $('#numberInput').val();
     $.ajax({
@@ -76,4 +97,4 @@ function postNumbers(){
 
 
 //USER ERRORS TO CONSIDER:
-// - What if user presses two expressions in a row?
+// - What if user presses two expressions in a row? or decimals?
