@@ -4,7 +4,6 @@ $(document).ready(onReady);
 
 function onReady(){
     console.log('jQuery working!')
-    // fetchResults();
     clickHandler();
 };
 
@@ -37,34 +36,44 @@ function operatorInput(){
     console.log(operatorArray);
     numArray = [];                                          //resets the number array, which allows for a new number
     if (operatorId === '='){                                //once user presses =, it sends expressions to server
-        postNumbers();                                      //to be calculated. Setting the data object
-    }                                                       //this way allows user to do unlimited calculations.
+        postNumbers();                                      //to be calculated. Setting the data object this way allows 
+        $('#displayNum').empty();                           //user to do unlimited calculations. Empty the display.
+    }                                                       
 }                                                            
                                                             
+function fetchResults(){
+    $.ajax({
+        method: 'GET',
+        url: '/results'
+    }).then(function(results){
+      $('#displayNum').append(`${results}`);
+    })
+};
+
+function fetchHistory(){
+    $.ajax({
+        method: 'GET',
+        url: '/history'
+    }).then(function(history){
+      $('#historyList').append(`<li>${history}</li>`);
+    })
+};
+
+
+function postNumbers(){
+    let value = $('#numberInput').val();
+    $.ajax({
+        method: 'POST',
+        url: '/calculate',
+        data: {operandArray, operatorArray}
+    }).then(function(respone){
+        fetchResults();
+        fetchHistory();
+    })
+};
 
 
 
 
-
-// function fetchResults(){
-//     $.ajax({
-//         method: 'GET',
-//         url: '/history'
-//     })
-//     // .then(function(response){
-//     // console.log(`${response}`)})
-// };
-
-// function postNumbers(){
-//     let value = $('#numberInput').val();
-//     $.ajax({
-//         method: 'POST',
-//         url: '/calculate',
-//         data: {value}
-//     })
-//     // .then(function(respone){
-//     //     console.log('Posted values worked!')
-//     //     fetchResults();
-//     // })
-// };
-
+//USER ERRORS TO CONSIDER:
+// - What if user presses two expressions in a row?
