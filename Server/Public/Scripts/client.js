@@ -1,5 +1,3 @@
-console.log('in js');
-
 $(document).ready(onReady);
 
 function onReady(){
@@ -10,6 +8,8 @@ function onReady(){
 function clickHandler(){
     $('.numButton').on('click', numButton);
     $('.operatorButton').on('click', operatorButton);
+    $('#clearButton').on('click', clearNumber);
+    $('#clearAll').on('click', clearAll);
 };
                                                         
 
@@ -25,9 +25,9 @@ function numButton(){
 function operatorButton(){
     let operator = $(this).attr('id');  
     $('#displayNum').empty();
-    appendDisplay(operator);
     concatNumber();
     operatorArray.push(operator);
+    appendHistory(operator);
     console.log(operatorArray);
 }
 
@@ -35,8 +35,11 @@ function appendDisplay(input){
     $('#displayNum').append(input);
 }
 
+function appendHistory(input){
+    $(`#historyList`).append(`${input} `);
+}
+
 function appendNumber(input){
-    let appendedNumber = '';
     if (input === '.' && appendArray.includes('.')){
         return;
     }
@@ -52,14 +55,22 @@ function concatNumber(){
     operandArray.push(operand);
     appendArray = [];
     console.log(operandArray);
+    appendHistory(operand);
 }
 
 function clearNumber(){
-
+    appendArray.pop(appendArray.length-1);
+    $('#displayNum').empty();
+    $('#displayNum').append(appendArray);
 }
 
 function clearAll(){
-
+    $('#displayNum').empty();
+    $('#historyList').empty();
+    appendArray = [];
+    operandArray = [];
+    operatorArray = [];
+    deleteHistory();
 }
 
 
@@ -93,8 +104,12 @@ function postNumbers(){
     })
 };
 
+function deleteHistory(){
 
+}
 
 
 //USER ERRORS TO CONSIDER:
-// - What if user presses two expressions in a row? or decimals?
+// - What if user presses two expressions in a row? 
+// - What about decimals? - SOLVED.
+// - What about negative numbers?
