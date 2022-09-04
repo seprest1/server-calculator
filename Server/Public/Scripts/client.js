@@ -1,3 +1,4 @@
+
 $(document).ready(onReady);
 
 function onReady(){
@@ -11,12 +12,12 @@ function clickHandler(){
     $('#clearButton').on('click', clearNumber);
     $('#clearAll').on('click', clearAll);
     $('#equalButton').on('click', equalButtonEvent);
+    $('#displaySection').on('click', '.historyLi', selectHistory);
 };
 
 let lastOperand = [];
 let currentOperand = [];
 let operator = '';
-let historyCount = 0;
 
 function numButton(){
     let digit = $(this).attr('id');  
@@ -108,10 +109,10 @@ function fetchHistory(){
         url: '/history'
     }).then(function(history){
         $('#historyList').empty();
-        historyCount++;
-        console.log(historyCount);
         for (item of history){
-        $('#historyList').append(`<li id = ${historyCount}>${item.lastOperand} ${item.operator} ${item.currentOperand}</li>`);
+            $('#historyList').append(`
+                <li class = "historyLi">${item.lastOperand} ${item.operator} ${item.currentOperand}</li>
+            `);
         }
     })
 };
@@ -138,7 +139,9 @@ function deleteHistory(){
     })
 };
 
-
+function selectHistory(){
+    
+}
 
 //USER ERROR CONSIDERATIONS:
 
