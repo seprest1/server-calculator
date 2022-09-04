@@ -20,89 +20,86 @@ let currentOperand = [];
 let operator = '';
 
 function numButton(){
-    let digit = $(this).attr('id');  
-    appendNumber(digit); 
+    let digit = $(this).attr('id');                                     //assigns value of button based on ID
+    appendNumber(digit);                                            
 }
 
-function operatorButton(){
-    if (operator === ''){
+function operatorButton(){                              
+    if (operator === ''){                                              //normal assigning of operator
         operator = $(this).attr('id');  
-        $('#displayNum').append(operator); 
+        $('#displayNum').append(operator);                             //adds operator to DOM
     }
-    else if (operator === '-' && $(this).attr('id') === '-'){
+    else if (operator === '-' && $(this).attr('id') === '-'){          //doesn't allow a double minus
         return;
     }
-    else if (operator !== '' && $(this).attr('id') === '-'){
-        appendNumber($(this).attr('id'));
-    }
+    else if (operator !== '' && $(this).attr('id') === '-'){           //allows a minus operator if not, to
+        appendNumber($(this).attr('id'));                              //allow for negative numbers, for 
+    }                                                                  //example (2 + -3) = -1
     else{
         return;
     }
 }
 
 function appendNumber(digit){
-    if (digit === '.' && lastOperand.includes('.') && operator === '' 
+    if (digit === '.' && lastOperand.includes('.') && operator === ''   //doesn't allow multiple decimals
      || digit === '.' && currentOperand.includes('.')){
         return;
     }
-    if (operator === ''){
-        lastOperand.push(digit);
+    if (operator === ''){                                               //pushes digit pressed into "last
+        lastOperand.push(digit);                                        //operand" array and adds to DOM
         $('#displayNum').append(digit); 
     }
-    else {
-        currentOperand.push(digit);
-        $('#displayNum').append(digit); 
+    else {  
+        currentOperand.push(digit);                                     //pushes digit pressed into "current
+        $('#displayNum').append(digit);                                 //operand" array and adds to DOM
     }
 }
 
 function clearNumber(){
-    if (currentOperand.length === 0 && operator !== ''){
-        operator = '';
-        $('#displayNum').empty();
-        $('#displayNum').append(lastOperand);
-        console.log('hi');
-        console.log(lastOperand, operator, currentOperand);
-    }
-    else if (currentOperand.length === 0){
-        lastOperand.pop(lastOperand.length-1);
+    if (currentOperand.length === 0 && operator !== ''){                //specifies clearing operator and 
+        operator = '';                                                  //appends the DOM
         $('#displayNum').empty();
         $('#displayNum').append(lastOperand);
     }
-    else{
-        currentOperand.pop(currentOperand.length-1);
+    else if (currentOperand.length === 0){                              //specifies clearing "last operator"
+        lastOperand.pop(lastOperand.length-1);                          //and appends the DOM
+        $('#displayNum').empty();
+        $('#displayNum').append(lastOperand);
+    }
+    else{                                                               //specifies clearing "current operator"
+        currentOperand.pop(currentOperand.length-1);                    //and appends the DOM
         $('#displayNum').empty();
         $('#displayNum').append(lastOperand, operator, currentOperand);
     }
 }
 
 function clearAll(){
-    $('#displayNum').empty();
-    $('#totalNum').empty();
+    $('#displayNum').empty();                   //deletes history on the DOM and server
+    $('#totalNum').empty();                     //and sets arrays/variables back to 0.
     $('#historyList').empty();
     lastOperand = [];
     currentOperand = [];
     operator = '';
     deleteHistory();
-    historyCount = 0;
 }
 
 function equalButtonEvent(){
     if (lastOperand.length === 0 || currentOperand.length === 0 || operator === ''){
-        return;
-    }
+        return;                     //makes it so users have to have all 3 inputs clicked
+    }                               //before having the equal button work
     else{
-        postNumbers();
+        postNumbers();              //send data object to the server
     }
 }
 
 function fetchResults(){
-    $.ajax({
+    $.ajax({                                                        //get results
         method: 'GET',
         url: '/results'
     }).then(function(results){
-      $('#displayNum').empty();
-      $('#totalNum').empty();
-      $('#totalNum').append(`${results}`);
+      $('#displayNum').empty();                                     //empty display and append DOM with results.
+      $('#totalNum').empty();                                       //resets values/arrays client-side
+      $('#totalNum').append(`${results}`);                          
       console.log(results);
       lastOperand = [];                                                  
       currentOperand = [];
@@ -113,11 +110,11 @@ function fetchResults(){
 function fetchHistory(){
     $.ajax({
         method: 'GET',
-        url: '/history'
+        url: '/history'                                             //get history
     }).then(function(history){
-        $('#historyList').empty();
-        for (item of history){
-            $('#historyList').append(`
+        $('#historyList').empty();                                  //empty DOM, loop through history and
+        for (item of history){                                      //append DOM with updated history   
+            $('#historyList').prepend(`                             
                 <li class = "historyLi">${item.lastOperand} ${item.operator} ${item.currentOperand}</li>
             `);
         }
@@ -126,21 +123,21 @@ function fetchHistory(){
 
 function postNumbers(){
     console.log(lastOperand, currentOperand);
-    if (typeof lastOperand === 'object' && typeof currentOperand === 'object'){
-            lastOperand = lastOperand.join('');
-            currentOperand = currentOperand.join('');
-    }
+    if (typeof lastOperand === 'object' && typeof currentOperand === 'object'){         //allows for the selectHistory
+            lastOperand = lastOperand.join('');                                         //function to run results again
+            currentOperand = currentOperand.join('');                                   //because they come out as a string
+    }                                                                                   //instead of an array, could be fixed later.
     $.ajax({
         method: 'POST',
-        url: '/calculate',
-        data: {lastOperand, operator, currentOperand}
+        url: '/calculate',                                                              //defines andmails data object
+        data: {lastOperand, operator, currentOperand}                                   //to the server, runs GET functions
     }).then(function(respone){
         fetchResults();
         fetchHistory();
     })
 };
 
-function deleteHistory(){
+function deleteHistory(){               //runs DELETE route
     $.ajax({
         method: 'DELETE',
         url: '/clear',
@@ -149,16 +146,16 @@ function deleteHistory(){
 };
 
 function selectHistory(){
-    let selectedRow = $(this).text().split(' ');
-    console.log(selectedRow);
-    for(i=0; i<selectedRow.length; i++){
-        lastOperand = selectedRow[0];
-        operator = selectedRow[1];
-        currentOperand = selectedRow[2];
+    let selectedRow = $(this).text().split(' ');                    //set variable to text of each <li>, split
+    console.log(selectedRow);                                       //it into an array, with variables
+    for(i=0; i<selectedRow.length; i++){                            //loop through array and reset arrays/
+        lastOperand = selectedRow[0];                               //elements to these values, which will be
+        operator = selectedRow[1];                                  //run again successfully when user presses
+        currentOperand = selectedRow[2];                            //the equal sign.
     }
-    console.log(lastOperand, operator, currentOperand);
+
     $('#displayNum').empty();
-    $('#displayNum').append(`${lastOperand} ${operator} ${currentOperand}`);
+    $('#displayNum').append(`${lastOperand} ${operator} ${currentOperand}`);        //update DOM with old calcuation
 }
 
 //USER ERROR CONSIDERATIONS:
