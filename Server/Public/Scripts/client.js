@@ -10,76 +10,95 @@ function clickHandler(){
     $('.operatorButton').on('click', operatorButton);
     $('#clearButton').on('click', clearNumber);
     $('#clearAll').on('click', clearAll);
+    $('#equalButton').on('click', equalButtonEvent);
 };
-                                                        
 
-let appendArray = [];
-let operandArray = [];
-let operatorArray = [];
+              
+
+
+
+let lastOperand = [];
+let currentOperand = [];
+let operator = '';
+// let historyCount;
 
 function numButton(){
     let digit = $(this).attr('id');  
     appendNumber(digit);
+    $('#displayNum').append(digit);  
 }
 
 function operatorButton(){
-    let operator = $(this).attr('id');  
-    $('#displayNum').empty();
-    concatNumber();
-    operatorArray.push(operator);
-    appendHistory(operator);
-    console.log(operatorArray);
+    operator = $(this).attr('id');  
+    $('#displayNum').append(operator);  
 }
 
-function appendDisplay(input){
-    $('#displayNum').append(input);
-}
-
-function appendHistory(input){
-    $(`#historyList`).append(`${input} `);
-}
-
-function appendNumber(input){
-    if (input === '.' && appendArray.includes('.')){
+function appendNumber(input, array){
+    if (input === '.' && lastOperand.includes('.') || input === '.' && currentOperand.includes('.')){
         return;
     }
-    else{
-        appendArray.push(input);
-        console.log(appendArray);
-        appendDisplay(input);
+    if (operator === ''){
+        lastOperand.push(input);
+    }
+    else {
+        currentOperand.push(input);
     }
 }
 
-function concatNumber(){
-    let operand = appendArray.join('');
-    operandArray.push(operand);
-    appendArray = [];
-    console.log(operandArray);
-    appendHistory(operand);
-}
+// function appendDisplay(input){
+//     $('#displayNum').append(input);
+// }
+
+// function appendHistory(input){
+//     historyCount++;
+//     $(`#historyList`).append(`<li id='#row ${historyCount}'>${input}</li>`);
+// }
 
 function clearNumber(){
-    appendArray.pop(appendArray.length-1);
-    $('#displayNum').empty();
-    $('#displayNum').append(appendArray);
+    if (currentOperand = []){
+        lastOperand.pop(lastOperand.length-1);
+        $('#displayNum').empty();
+        $('#displayNum').append(lastOperand);
+    }
+    else{
+        currentOperand.pop(currentOperand.length-1);
+        $('#displayNum').empty();
+        $('#displayNum').append(currentOperand);
+    }
+    
+    // if ($(this).array === currentOperand){
+    //     currentOperand.pop(currentOperand.length-1);
+    // }
+    // $('#displayNum').empty();
+    // $('#displayNum').append(currentOperand);
 }
 
 function clearAll(){
     $('#displayNum').empty();
     $('#historyList').empty();
     appendArray = [];
-    operandArray = [];
-    operatorArray = [];
+    operand = '';
+    operator = '';
     deleteHistory();
 }
 
+function equalButtonEvent(){
+    console.log(lastOperand, currentOperand, operator);
+    postNumbers();
+}
 
 function fetchResults(){
     $.ajax({
         method: 'GET',
         url: '/results'
     }).then(function(results){
-      $('#displayNum').append(`${results}`);
+      $('#displayNum').empty();
+      $('#totalNum').empty();
+      $('#totalNum').append(`${results}`);
+      lastOperand = [];                                                   //results.split('');
+      currentOperand = [];
+      operator = '';
+      console.log(lastOperand, operator, currentOperand);
     })
 };
 
@@ -88,25 +107,31 @@ function fetchHistory(){
         method: 'GET',
         url: '/history'
     }).then(function(history){
-      $('#historyList').append(`<li>${history}</li>`);
+        $('#historyList').empty();
+        for (item of history){
+        $('#historyList').append(`<li>${item.lastOperand} ${item.operator} ${item.currentOperand}</li>`);
+        }
     })
 };
 
 function postNumbers(){
-    let value = $('#numberInput').val();
+    lastOperand = lastOperand.join('');
+    currentOperand = currentOperand.join('');
     $.ajax({
         method: 'POST',
         url: '/calculate',
-        data: {operandArray, operatorArray}
+        data: {lastOperand, operator, currentOperand}
     }).then(function(respone){
         fetchResults();
         fetchHistory();
     })
 };
 
-function deleteHistory(){
 
-}
+
+// function deleteHistory(){
+
+// }
 
 
 //USER ERRORS TO CONSIDER:
