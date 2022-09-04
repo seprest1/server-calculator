@@ -37,7 +37,7 @@ I found it challenging to settle on a data object at first, knowing it would aff
 
 The most difficult part of this assignment, however, was following a series of logic stops, to prevent user error. I spent quite some time attempting to allow users to use the last-recent total in their next calculation, as well as be able to have unlimited operands. Alas, I had to put down these ideas due to time. 
 
-Some of the aforementioned user errors include:
+Some of the user errors I was able to prevent:
 - Multiple operators in a row       
 - Changing operators mid-way        
 - Multiple decimals in a row         
