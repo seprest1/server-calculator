@@ -1,7 +1,106 @@
 body{
-    background-color:darkslategrey;
+    background-color: teal;
+    padding: 0;
+    margin: 0;
+}
+
+*, *::before, *::after{
+    box-sizing: border-box;
+    font-family: 'Helvetic', sans-serif;
+    letter-spacing: 1px;
+    font-weight: normal;
+}
+
+#container{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    min-height: 100vh;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: minmax(150px, auto)repeat(5, 100px);
+}
+
+#displaySection{
+    background-color: yellowgreen;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+    "history total"
+    "history display";
+    align-content: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+button {
+    cursor: pointer;
+    font-size: 2rem;
+    border: 1px solid white;
+    outline: none;
+    background-color: rgba(225, 225, 225, .40);
+    margin: 0;
+}
+
+button:hover{
+    background-color: rgba(225, 225, 225, .70);
+}
+
+ul {
+    grid-area: history;
+    list-style-type: none;
+    text-align: left;
+    min-height: 30px;
+    max-height: 153px;
+    margin: 25px 30px;
+    overflow-y: auto;
+    display: flex;
+    align-content: flex-start;
+    justify-items: self-start;
+    flex-direction: column;
+    opacity: .40;
+    font-weight: bold;
+    grid-area: history;
+    padding: 0;
+    grid-row: span 2;
+    min-width: 100px;
 }
 
 li {
-    font-size: xx-large;
+    margin: 0;
+    padding: 3px;
+}
+
+li:hover{
+    background-color: yellow;
+    opacity: .20;
+}
+
+h2 {
+    margin: 0;
+    grid-area: total;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    font-size: 7vh;
+    opacity: .75;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+span {
+    grid-area: display;
+    display: flex;
+    align-self: end;
+    justify-content: end;
+    margin: 20px;
+    font-size: 30px;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+#clearAll, #equalButton {
+    grid-column: span 2;
 }
