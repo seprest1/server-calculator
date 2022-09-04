@@ -18,9 +18,18 @@ We were asked not to use the eval ( ) function for this assignment.
 
 Basic Mode Calculator:
 
+<img width="486" alt="baseMode" src="https://user-images.githubusercontent.com/105940054/188334050-16aa9929-fb8d-41d1-87e2-4e21629dbb2c.png">
+
 Stretch Mode Calculator:
 
+![stretchGoal_interface](https://user-images.githubusercontent.com/105940054/188334059-b8e40621-5011-4e40-ab08-25d0739d8a8e.gif)
+
 Final Result:
+
+<img width="1440" alt="Screen Shot 2022-09-04 at 3 56 54 PM" src="https://user-images.githubusercontent.com/105940054/188334084-79ea19dd-89c3-4e37-94e7-9d6a4da21f47.png">
+
+<img width="1440" alt="Screen Shot 2022-09-04 at 3 57 10 PM" src="https://user-images.githubusercontent.com/105940054/188334095-a2e0bf5c-ab41-4924-a7be-bdadab178b1d.png">
+
 
 ## Challenges
 
