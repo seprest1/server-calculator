@@ -35,17 +35,11 @@ app.delete('/clear', (req, res) => {
     res.sendStatus(202);
 })
 
-
-app.listen(PORT, () => {
-    console.log(`I'm listening! Go to: http://localhost:${PORT}`);
-});
-
-
 function calculate(numObject){
     let lastOperand = Number(numObject.lastOperand);
     let currentOperand = Number(numObject.currentOperand)
     let operator = numObject.operator;
-    results = String(convertOperators(operator, lastOperand, currentOperand));
+    results = String(Math.round((convertOperators(operator, lastOperand, currentOperand))*1000)/1000);
 };
 
 
@@ -57,4 +51,8 @@ function convertOperators(operator, lastOperand, currentOperand){
         case '/': return lastOperand / currentOperand
     }
 }
+
+app.listen(PORT, () => {
+    console.log(`I'm listening! Go to: http://localhost:${PORT}`);
+});
 

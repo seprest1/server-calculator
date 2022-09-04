@@ -25,13 +25,15 @@ body{
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas: 
+    "history total"
     "history total"
     "history display";
     align-content: center;
     justify-content: center;
     border: 2px solid white;
+    max-height: 20vh;
 }
 
 button {
@@ -51,20 +53,18 @@ ul {
     grid-area: history;
     list-style-type: none;
     text-align: left;
-    min-height: 30px;
-    max-height: 153px;
-    margin: 25px 30px;
+    margin: 10px 10px 20px 10px;
+    padding: 10px;
     overflow-y: auto;
     display: flex;
     align-content: flex-start;
     justify-items: self-start;
     flex-direction: column;
     opacity: .40;
-    font-weight: bold;
     grid-area: history;
-    padding: 0;
-    grid-row: span 2;
-    min-width: 100px;
+    grid-row: span 3;
+    word-break: break-all;
+    word-wrap: break-word;
 }
 
 li {
@@ -73,21 +73,23 @@ li {
 }
 
 li:hover{
-    background-color: yellow;
-    opacity: .20;
+    background-color: rgb(163, 236, 26, .90);
 }
 
 h2 {
-    margin: 0;
+    margin: 20px 10px;
     grid-area: total;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: end;
-    font-size: 7vh;
+    font-size: 4vw;
     opacity: .75;
-    margin-right: 20px;
-    margin-top: 20px;
+    overflow-y: auto;
+    grid-row: span 2;
+    word-wrap: break-word;
+    word-break: break-all;
+    padding: 0;
 }
 
 span {
@@ -98,6 +100,7 @@ span {
     margin: 20px;
     font-size: 30px;
     text-align: center;
+    height: 50px;
     overflow-x: hidden;
 }
 

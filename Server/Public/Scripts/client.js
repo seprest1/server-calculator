@@ -56,7 +56,14 @@ function appendNumber(digit){
 }
 
 function clearNumber(){
-    if (currentOperand.length === 0){
+    if (currentOperand.length === 0 && operator !== ''){
+        operator = '';
+        $('#displayNum').empty();
+        $('#displayNum').append(lastOperand);
+        console.log('hi');
+        console.log(lastOperand, operator, currentOperand);
+    }
+    else if (currentOperand.length === 0){
         lastOperand.pop(lastOperand.length-1);
         $('#displayNum').empty();
         $('#displayNum').append(lastOperand);
@@ -96,10 +103,10 @@ function fetchResults(){
       $('#displayNum').empty();
       $('#totalNum').empty();
       $('#totalNum').append(`${results}`);
-      lastOperand = [];                                                   //results.split('');
+      console.log(results);
+      lastOperand = [];                                                  
       currentOperand = [];
       operator = '';
-      console.log(lastOperand, operator, currentOperand);
     })
 };
 
@@ -118,9 +125,11 @@ function fetchHistory(){
 };
 
 function postNumbers(){
-    lastOperand = lastOperand.join('');
-    currentOperand = currentOperand.join('');
-    console.log(lastOperand, operator, currentOperand);
+    console.log(lastOperand, currentOperand);
+    if (typeof lastOperand === 'object' && typeof currentOperand === 'object'){
+            lastOperand = lastOperand.join('');
+            currentOperand = currentOperand.join('');
+    }
     $.ajax({
         method: 'POST',
         url: '/calculate',
@@ -140,7 +149,16 @@ function deleteHistory(){
 };
 
 function selectHistory(){
-    
+    let selectedRow = $(this).text().split(' ');
+    console.log(selectedRow);
+    for(i=0; i<selectedRow.length; i++){
+        lastOperand = selectedRow[0];
+        operator = selectedRow[1];
+        currentOperand = selectedRow[2];
+    }
+    console.log(lastOperand, operator, currentOperand);
+    $('#displayNum').empty();
+    $('#displayNum').append(`${lastOperand} ${operator} ${currentOperand}`);
 }
 
 //USER ERROR CONSIDERATIONS:

@@ -26,7 +26,7 @@ Keep a historical record of all math operations and solutions on the server. Dis
 
 ## Stretch Goals
 
-- Convert the interface to look and behave like a calculator as shown below.
+X Convert the interface to look and behave like a calculator as shown below.
 
   *Interfaces that mirror real world objects are often more intuitive and self-explanatory for users.*
 
