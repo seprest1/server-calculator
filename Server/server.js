@@ -16,7 +16,6 @@ app.get('/results', (req,res) => {
 
 app.get('/history', (req,res) => {
     console.log('GET /history recieved a request')
-    history.push(numObject);
     res.send(history);
 });
 
@@ -25,13 +24,14 @@ app.post('/calculate', (req, res) => {
     console.log('POST /calculate received a request!')
     console.log('Req.body is:', req.body);
     calculate(req.body);
-    addHistory(req.body);
+    history.push(req.body);
     res.sendStatus(201);
 })
 
 app.delete('/clear', (req, res) => {
     console.log('DELETE /clear recieved a request!');
     history = [];
+    console.log(history);
     res.sendStatus(202);
 })
 

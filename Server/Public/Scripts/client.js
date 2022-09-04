@@ -1,8 +1,8 @@
 $(document).ready(onReady);
 
 function onReady(){
-    console.log('jQuery working!')
     clickHandler();
+    fetchHistory();
 };
 
 function clickHandler(){
@@ -13,46 +13,43 @@ function clickHandler(){
     $('#equalButton').on('click', equalButtonEvent);
 };
 
-              
-
-
-
 let lastOperand = [];
 let currentOperand = [];
 let operator = '';
-// let historyCount;
+let historyCount = 0;
 
 function numButton(){
     let digit = $(this).attr('id');  
-    appendNumber(digit);
-    $('#displayNum').append(digit);  
+    appendNumber(digit); 
 }
 
 function operatorButton(){
-    operator = $(this).attr('id');  
-    $('#displayNum').append(operator);  
+    if (operator === ''){
+        operator = $(this).attr('id');  
+        $('#displayNum').append(operator); 
+    }
+    if (operator !== '' && $(this).attr('id') === '-'){
+        appendNumber($(this).attr('id'));
+    }
+    else{
+        return;
+    }
 }
 
-function appendNumber(input, array){
-    if (input === '.' && lastOperand.includes('.') || input === '.' && currentOperand.includes('.')){
+function appendNumber(digit){
+    if (digit === '.' && lastOperand.includes('.') && operator === '' 
+     || digit === '.' && currentOperand.includes('.')){
         return;
     }
     if (operator === ''){
-        lastOperand.push(input);
+        lastOperand.push(digit);
+        $('#displayNum').append(digit); 
     }
     else {
-        currentOperand.push(input);
+        currentOperand.push(digit);
+        $('#displayNum').append(digit); 
     }
 }
-
-// function appendDisplay(input){
-//     $('#displayNum').append(input);
-// }
-
-// function appendHistory(input){
-//     historyCount++;
-//     $(`#historyList`).append(`<li id='#row ${historyCount}'>${input}</li>`);
-// }
 
 function clearNumber(){
     if (currentOperand = []){
@@ -65,26 +62,26 @@ function clearNumber(){
         $('#displayNum').empty();
         $('#displayNum').append(currentOperand);
     }
-    
-    // if ($(this).array === currentOperand){
-    //     currentOperand.pop(currentOperand.length-1);
-    // }
-    // $('#displayNum').empty();
-    // $('#displayNum').append(currentOperand);
 }
 
 function clearAll(){
     $('#displayNum').empty();
+    $('#totalNum').empty();
     $('#historyList').empty();
-    appendArray = [];
-    operand = '';
+    lastOperand = [];
+    currentOperand = [];
     operator = '';
     deleteHistory();
+    historyCount = 0;
 }
 
 function equalButtonEvent(){
-    console.log(lastOperand, currentOperand, operator);
-    postNumbers();
+    if (lastOperand.length === 0 || currentOperand.length === 0 || operator === ''){
+        return;
+    }
+    else{
+        postNumbers();
+    }
 }
 
 function fetchResults(){
@@ -108,8 +105,10 @@ function fetchHistory(){
         url: '/history'
     }).then(function(history){
         $('#historyList').empty();
+        historyCount++;
+        console.log(historyCount);
         for (item of history){
-        $('#historyList').append(`<li>${item.lastOperand} ${item.operator} ${item.currentOperand}</li>`);
+        $('#historyList').append(`<li id = ${historyCount}>${item.lastOperand} ${item.operator} ${item.currentOperand}</li>`);
         }
     })
 };
@@ -127,14 +126,20 @@ function postNumbers(){
     })
 };
 
+function deleteHistory(){
+    $.ajax({
+        method: 'DELETE',
+        url: '/clear',
+        data: {}
+    })
+};
 
 
-// function deleteHistory(){
 
-// }
+//USER ERROR CONSIDERATIONS:
 
-
-//USER ERRORS TO CONSIDER:
-// - What if user presses two expressions in a row? 
-// - What about decimals? - SOLVED.
-// - What about negative numbers?
+// - Multiple operators in a row        - SOLVED.
+// - Changing operators mid-way         - SOLVED.
+// - Multiple decimals in a row         - SOLVED.
+// - Missing fields                     - SOLVED.
+// - Computing with negative numbers    - SOLVED
