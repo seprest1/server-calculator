@@ -28,7 +28,10 @@ function operatorButton(){
         operator = $(this).attr('id');  
         $('#displayNum').append(operator); 
     }
-    if (operator !== '' && $(this).attr('id') === '-'){
+    else if (operator === '-' && $(this).attr('id') === '-'){
+        return;
+    }
+    else if (operator !== '' && $(this).attr('id') === '-'){
         appendNumber($(this).attr('id'));
     }
     else{
@@ -52,7 +55,7 @@ function appendNumber(digit){
 }
 
 function clearNumber(){
-    if (currentOperand = []){
+    if (currentOperand.length === 0){
         lastOperand.pop(lastOperand.length-1);
         $('#displayNum').empty();
         $('#displayNum').append(lastOperand);
@@ -60,7 +63,7 @@ function clearNumber(){
     else{
         currentOperand.pop(currentOperand.length-1);
         $('#displayNum').empty();
-        $('#displayNum').append(currentOperand);
+        $('#displayNum').append(lastOperand, operator, currentOperand);
     }
 }
 
@@ -116,6 +119,7 @@ function fetchHistory(){
 function postNumbers(){
     lastOperand = lastOperand.join('');
     currentOperand = currentOperand.join('');
+    console.log(lastOperand, operator, currentOperand);
     $.ajax({
         method: 'POST',
         url: '/calculate',
